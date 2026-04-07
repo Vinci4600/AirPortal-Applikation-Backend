@@ -1,4 +1,4 @@
-package org.example.projektarbeit_modul295_vincent_diergardt;
+package org.example.projektarbeit_modul295_vincent_diergardt.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
