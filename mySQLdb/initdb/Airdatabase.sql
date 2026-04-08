@@ -73,8 +73,8 @@ CREATE TABLE booking (
 
 -- Insert Test Users (Password: admin123)
 INSERT INTO app_user (username, email, password, role) VALUES
-('admin', 'admin@example.com', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xdqD1RPHKQZWG392', 'ADMIN'),
-('user', 'user@example.com', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xdqD1RPHKQZWG392', 'USER');
+('admin', 'admin@example.com', '$2a$10$XYg.juCbjqrx4yNVkSWavenJdobxq11fojnQ3l8bp2R20PTwtrtMS', 'ADMIN'),
+('user', 'user@example.com', '$2a$10$XYg.juCbjqrx4yNVkSWavenJdobxq11fojnQ3l8bp2R20PTwtrtMS', 'USER');
 
 -- Insert Airports
 INSERT INTO airport (name, country, iata_code) VALUES
