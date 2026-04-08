@@ -40,20 +40,20 @@ public class LogisticUserService {
     }
 
     private LogisticUserDTO convertToDTO(LogisticUser logisticUser) {
-        LogisticUserDTO dto = new LogisticUserDTO();
-        dto.setId(logisticUser.getId());
-        dto.setFirstname(logisticUser.getFirstname());
-        dto.setLastname(logisticUser.getLastname());
-        dto.setEmail(logisticUser.getEmail());
-        dto.setCreateDate(logisticUser.getCreateDate());
-        return dto;
+        return new LogisticUserDTO(
+                logisticUser.getId(),
+                logisticUser.getFirstname(),
+                logisticUser.getLastname(),
+                logisticUser.getEmail(),
+                logisticUser.getCreateDate()
+        );
     }
 
     private LogisticUser convertToEntity(LogisticUserDTO dto) {
         LogisticUser logisticUser = new LogisticUser();
-        logisticUser.setFirstname(dto.getFirstname());
-        logisticUser.setLastname(dto.getLastname());
-        logisticUser.setEmail(dto.getEmail());
+        logisticUser.setFirstname(dto.firstname());
+        logisticUser.setLastname(dto.lastname());
+        logisticUser.setEmail(dto.email());
         return logisticUser;
     }
 }

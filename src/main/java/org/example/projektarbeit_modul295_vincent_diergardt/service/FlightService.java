@@ -44,37 +44,31 @@ public class FlightService {
     }
 
     private FlightDTO convertToDTO(Flight flight) {
-        FlightDTO dto = new FlightDTO();
-        dto.setId(flight.getFlight_id());
-        dto.setFlightNumber(flight.getFlightNumber());
-        dto.setDepartureTime(flight.getDepartureTime());
-        dto.setArrivalTime(flight.getArrivalTime());
-        if (flight.getAircraft() != null) {
-            dto.setAircraftId(flight.getAircraft().getId());
-        }
-        if (flight.getDepartureAirport() != null) {
-            dto.setDepartureAirportId(flight.getDepartureAirport().getId());
-        }
-        if (flight.getArrivalAirport() != null) {
-            dto.setArrivalAirportId(flight.getArrivalAirport().getId());
-        }
-        return dto;
+        return new FlightDTO(
+                flight.getFlight_id(),
+                flight.getFlightNumber(),
+                flight.getDepartureTime(),
+                flight.getArrivalTime(),
+                flight.getAircraft() != null ? flight.getAircraft().getId() : null,
+                flight.getDepartureAirport() != null ? flight.getDepartureAirport().getId() : null,
+                flight.getArrivalAirport() != null ? flight.getArrivalAirport().getId() : null
+        );
     }
 
     private Flight convertToEntity(FlightDTO dto) {
         Flight flight = new Flight();
-        flight.setFlightNumber(dto.getFlightNumber());
-        flight.setDepartureTime(dto.getDepartureTime());
-        flight.setArrivalTime(dto.getArrivalTime());
+        flight.setFlightNumber(dto.flightNumber());
+        flight.setDepartureTime(dto.departureTime());
+        flight.setArrivalTime(dto.arrivalTime());
         
-        if (dto.getAircraftId() != null) {
-            aircraftRepository.findById(dto.getAircraftId()).ifPresent(flight::setAircraft);
+        if (dto.aircraftId() != null) {
+            aircraftRepository.findById(dto.aircraftId()).ifPresent(flight::setAircraft);
         }
-        if (dto.getDepartureAirportId() != null) {
-            airportRepository.findById(dto.getDepartureAirportId()).ifPresent(flight::setDepartureAirport);
+        if (dto.departureAirportId() != null) {
+            airportRepository.findById(dto.departureAirportId()).ifPresent(flight::setDepartureAirport);
         }
-        if (dto.getArrivalAirportId() != null) {
-            airportRepository.findById(dto.getArrivalAirportId()).ifPresent(flight::setArrivalAirport);
+        if (dto.arrivalAirportId() != null) {
+            airportRepository.findById(dto.arrivalAirportId()).ifPresent(flight::setArrivalAirport);
         }
         
         return flight;

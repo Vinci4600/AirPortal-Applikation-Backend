@@ -38,19 +38,19 @@ public class AirportService {
     }
 
     private AirportDTO convertToDTO(Airport airport) {
-        AirportDTO dto = new AirportDTO();
-        dto.setId(airport.getId());
-        dto.setName(airport.getName());
-        dto.setCountry(airport.getCountry());
-        dto.setIataCode(airport.getIataCode());
-        return dto;
+        return new AirportDTO(
+                airport.getId(),
+                airport.getName(),
+                airport.getCountry(),
+                airport.getIataCode()
+        );
     }
 
     private Airport convertToEntity(AirportDTO dto) {
         Airport airport = new Airport();
-        airport.setName(dto.getName());
-        airport.setCountry(dto.getCountry());
-        airport.setIataCode(dto.getIataCode());
+        airport.setName(dto.name());
+        airport.setCountry(dto.country());
+        airport.setIataCode(dto.iataCode());
         return airport;
     }
 }

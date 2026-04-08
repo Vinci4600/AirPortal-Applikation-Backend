@@ -44,27 +44,23 @@ public class BookingService {
     }
 
     private BookingDTO convertToDTO(Booking booking) {
-        BookingDTO dto = new BookingDTO();
-        dto.setId(booking.getId());
-        dto.setBookingDate(booking.getBookingDate());
-        if (booking.getFlight() != null) {
-            dto.setFlightId(booking.getFlight().getFlight_id());
-        }
-        if (booking.getPassenger() != null) {
-            dto.setPassengerId(booking.getPassenger().getId());
-        }
-        return dto;
+        return new BookingDTO(
+                booking.getId(),
+                booking.getFlight() != null ? booking.getFlight().getFlight_id() : null,
+                booking.getPassenger() != null ? booking.getPassenger().getId() : null,
+                booking.getBookingDate()
+        );
     }
 
     private Booking convertToEntity(BookingDTO dto) {
         Booking booking = new Booking();
-        booking.setBookingDate(dto.getBookingDate());
+        booking.setBookingDate(dto.bookingDate());
         
-        if (dto.getFlightId() != null) {
-            flightRepository.findById(dto.getFlightId()).ifPresent(booking::setFlight);
+        if (dto.flightId() != null) {
+            flightRepository.findById(dto.flightId()).ifPresent(booking::setFlight);
         }
-        if (dto.getPassengerId() != null) {
-            passengerRepository.findById(dto.getPassengerId()).ifPresent(booking::setPassenger);
+        if (dto.passengerId() != null) {
+            passengerRepository.findById(dto.passengerId()).ifPresent(booking::setPassenger);
         }
         
         return booking;

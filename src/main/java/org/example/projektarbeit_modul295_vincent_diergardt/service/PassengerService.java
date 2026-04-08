@@ -38,19 +38,19 @@ public class PassengerService {
     }
 
     private PassengerDTO convertToDTO(Passenger passenger) {
-        PassengerDTO dto = new PassengerDTO();
-        dto.setId(passenger.getId());
-        dto.setFirstname(passenger.getFirstname());
-        dto.setLastname(passenger.getLastname());
-        dto.setEmail(passenger.getEmail());
-        return dto;
+        return new PassengerDTO(
+                passenger.getId(),
+                passenger.getFirstname(),
+                passenger.getLastname(),
+                passenger.getEmail()
+        );
     }
 
     private Passenger convertToEntity(PassengerDTO dto) {
         Passenger passenger = new Passenger();
-        passenger.setFirstname(dto.getFirstname());
-        passenger.setLastname(dto.getLastname());
-        passenger.setEmail(dto.getEmail());
+        passenger.setFirstname(dto.firstname());
+        passenger.setLastname(dto.lastname());
+        passenger.setEmail(dto.email());
         return passenger;
     }
 }

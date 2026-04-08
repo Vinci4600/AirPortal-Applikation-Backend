@@ -38,20 +38,20 @@ public class AircraftService {
     }
 
     private AircraftDTO convertToDTO(Aircraft aircraft) {
-        AircraftDTO dto = new AircraftDTO();
-        dto.setId(aircraft.getId());
-        dto.setModel(aircraft.getModel());
-        dto.setManufacture(aircraft.getManufacture());
-        dto.setGewicht(aircraft.getGewicht());
-        dto.setCreateDate(aircraft.getCreateDate());
-        return dto;
+        return new AircraftDTO(
+                aircraft.getId(),
+                aircraft.getModel(),
+                aircraft.getManufacture(),
+                aircraft.getGewicht(),
+                aircraft.getCreateDate()
+        );
     }
 
     private Aircraft convertToEntity(AircraftDTO dto) {
         Aircraft aircraft = new Aircraft();
-        aircraft.setModel(dto.getModel());
-        aircraft.setManufacture(dto.getManufacture());
-        aircraft.setGewicht(dto.getGewicht());
+        aircraft.setModel(dto.model());
+        aircraft.setManufacture(dto.manufacture());
+        aircraft.setGewicht(dto.gewicht());
         return aircraft;
     }
 }
