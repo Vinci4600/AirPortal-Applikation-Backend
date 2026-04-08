@@ -53,9 +53,9 @@ public class AuthController {
         try {
             // Service Layer aufrufen
             AppUser newUser = appUserService.registerUser(
-                    request.getUsername(),
-                    request.getEmail(),
-                    request.getPassword(),
+                    request.username(),
+                    request.email(),
+                    request.password(),
                     Role.USER  // Default Role für neue User
             );
 
@@ -108,14 +108,14 @@ public class AuthController {
             Optional<AppUser> userOpt;
 
             // Prüfen ob Email oder Username
-            if (request.getUsernameOrEmail().contains("@")) {
+            if (request.usernameOrEmail().contains("@")) {
                 // Hat @? → Email
                 userOpt = appUserService
-                        .findByEmail(request.getUsernameOrEmail());
+                        .findByEmail(request.usernameOrEmail());
             } else {
                 // Kein @? → Username
                 userOpt = appUserService
-                        .findByUsername(request.getUsernameOrEmail());
+                        .findByUsername(request.usernameOrEmail());
             }
 
             // User existiert nicht
@@ -130,7 +130,7 @@ public class AuthController {
             // 2. Passwort prüfen mit authenticateUser
             Optional<AppUser> authenticatedUser =
                     appUserService.authenticateUser(user.getUsername(),
-                            request.getPassword());
+                            request.password());
 
             if (authenticatedUser.isEmpty()) {
                 // Passwort falsch
