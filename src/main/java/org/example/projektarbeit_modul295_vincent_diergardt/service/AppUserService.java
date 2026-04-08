@@ -1,0 +1,117 @@
+package org.example.projektarbeit_modul295_vincent_diergardt.service;
+
+import org.example.projektarbeit_modul295_vincent_diergardt.model.AppUser;
+import org.example.projektarbeit_modul295_vincent_diergardt.model.Role;
+import org.example.projektarbeit_modul295_vincent_diergardt.repository.AppUserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+@Service
+@Transactional
+public class AppUserService {
+
+    // Dependencies via Constructor Injection (Best Practice!)
+    private final AppUserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    /**
+     * Instantiates a new App user service.
+     *
+     * @param userRepository  the user repository
+     * @param passwordEncoder the password encoder
+     */
+    public AppUserService(AppUserRepository userRepository,
+                          PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    /**
+     * Register user app user.
+     *
+     * @param username    the username
+     * @param email       the email
+     * @param rawPassword the raw password
+     * @param role        the role
+     * @return the app user
+     */
+    public AppUser registerUser(String username, String email,
+                                String rawPassword, Role role) {
+
+        // Validierung: Username bereits vergeben?
+        if (userRepository.existsByUsername(username)) {
+            throw new IllegalArgumentException(
+                    "Username '" + username + "' ist bereits vergeben"
+            );
+        }
+
+        // Validierung: E-Mail bereits registriert?
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException(
+                    "Email '" + email + "' ist bereits registriert"
+            );
+        }
+
+        // Passwort hashen (NIE raw password speichern!)
+        String hashedPassword = passwordEncoder.encode(rawPassword);
+
+        // User Entity erstellen
+        AppUser newUser = new AppUser(username, email, hashedPassword, role);
+
+        // Speichern und zurückgeben
+        // save() gibt den gespeicherten User MIT ID zurück
+        return userRepository.save(newUser);
+    }
+
+    /**
+     * Find by username optional.
+     *
+     * @param username the username
+     * @return the optional
+     */
+    public Optional<AppUser> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    /**
+     * Authenticate user optional.
+     *
+     * @param username    the username
+     * @param rawPassword the raw password
+     * @return the optional
+     */
+    public Optional<AppUser> authenticateUser(String username, String rawPassword) {
+        // User suchen
+        Optional<AppUser> userOpt = userRepository.findByUsername(username);
+
+        if (userOpt.isPresent()) {
+            AppUser user = userOpt.get();
+
+            // Passwort prüfen (BCrypt macht das intern mit Salt)
+            if (passwordEncoder.matches(rawPassword, user.getPassword())) {
+                return userOpt;  // Login erfolgreich
+            }
+        }
+
+        return Optional.empty();  // Login fehlgeschlagen
+    }
+
+    private boolean isValidEmail(String email) {
+        return email != null &&
+                email.contains("@") &&
+                email.length() > 3;
+    }
+
+    /**
+     * Find by email optional.
+     *
+     * @param email the email
+     * @return the optional
+     */
+    public Optional<AppUser> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+}
