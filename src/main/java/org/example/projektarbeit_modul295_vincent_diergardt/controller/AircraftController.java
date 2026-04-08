@@ -5,6 +5,7 @@ import org.example.projektarbeit_modul295_vincent_diergardt.repository.AircraftR
 import org.example.projektarbeit_modul295_vincent_diergardt.repository.FlightRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -37,6 +38,7 @@ public class AircraftController {
      *
      */
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<Aircraft> getAllAircraft() {
         return aircraftRepository.findAll();
     }
@@ -48,6 +50,7 @@ public class AircraftController {
      *
      */
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public Aircraft createAircraft(@RequestBody Aircraft aircraft) {
         return aircraftRepository.save(aircraft);
     }
@@ -59,10 +62,12 @@ public class AircraftController {
      * @return
      */
     @PostMapping("/addAll")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Aircraft> createMultipleAircraft(@RequestBody List<Aircraft> aircraftList) {
         return aircraftRepository.saveAll(aircraftList);
     }
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteAircraft(@PathVariable Long id) {
 
         if (!aircraftRepository.existsById(id)) {
@@ -81,4 +86,3 @@ public class AircraftController {
     }
 
 }
-

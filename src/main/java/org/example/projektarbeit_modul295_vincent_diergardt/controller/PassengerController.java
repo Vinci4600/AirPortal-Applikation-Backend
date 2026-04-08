@@ -4,6 +4,7 @@ import org.example.projektarbeit_modul295_vincent_diergardt.model.Passenger;
 import org.example.projektarbeit_modul295_vincent_diergardt.repository.PassengerRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class PassengerController {
      * @return the all passengers
      */
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<Passenger> getAllPassengers() {
         return passengerRepository.findAll();
     }
@@ -43,11 +45,13 @@ public class PassengerController {
      * @return the passenger
      */
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public Passenger createPassenger(@RequestBody Passenger passenger) {
         return passengerRepository.save(passenger);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deletePassenger(@PathVariable Long id) {
 
         if (!passengerRepository.existsById(id)) {

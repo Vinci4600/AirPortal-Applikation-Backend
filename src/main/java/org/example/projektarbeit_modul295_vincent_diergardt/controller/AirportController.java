@@ -2,9 +2,9 @@ package org.example.projektarbeit_modul295_vincent_diergardt.controller;
 
 import org.example.projektarbeit_modul295_vincent_diergardt.model.Airport;
 import org.example.projektarbeit_modul295_vincent_diergardt.repository.AirportRepository;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +34,7 @@ public class AirportController {
      * @return the all
      */
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<Airport> getAll() {
         return repository.findAll();
     }
@@ -45,6 +46,7 @@ public class AirportController {
      * @return the airport
      */
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public Airport createAirport(@RequestBody Airport airport) {
         return repository.save(airport);
     }
@@ -54,11 +56,13 @@ public class AirportController {
      * Erstellt mehrere Flughäfen und fügt diese in die Liste hinzu.
      */
     @PostMapping("/addAll")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Airport> createAirports(@RequestBody List<Airport> airports) {
         return repository.saveAll(airports);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteAirport(@PathVariable Long id) {
 
         // Prüfen ob Airport existiert
@@ -78,5 +82,3 @@ public class AirportController {
                     .body("Airport kann nicht gelöscht werden, da noch Flights existieren!");
         }
     }}
-
-

@@ -4,6 +4,7 @@ import org.example.projektarbeit_modul295_vincent_diergardt.model.Booking;
 import org.example.projektarbeit_modul295_vincent_diergardt.repository.BookingRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class BookingController {
      * @return the alle Buchungen
      */
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<Booking> getAllBookings() {//Buchungen anschauen
         return bookingRepository.findAll();
     }
@@ -42,11 +44,13 @@ public class BookingController {
      * @return return Booking
      */
     @PostMapping("/add")//Buchung Hinzufügen
+    @PreAuthorize("hasRole('ADMIN')")
     public Booking createBooking(@RequestBody Booking booking) {
         return bookingRepository.save(booking);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteBooking(@PathVariable Long id) {
 
         if (!bookingRepository.existsById(id)) {
