@@ -1,7 +1,7 @@
 package org.example.projektarbeit_modul295_vincent_diergardt.controller;
 
-import org.example.projektarbeit_modul295_vincent_diergardt.model.Flight;
-import org.example.projektarbeit_modul295_vincent_diergardt.repository.FlightRepository;
+import org.example.projektarbeit_modul295_vincent_diergardt.dto.FlightDTO;
+import org.example.projektarbeit_modul295_vincent_diergardt.service.FlightService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,16 +16,16 @@ import java.util.List;
 @RequestMapping("/api/flights")
 @CrossOrigin(origins = "http://localhost:5173")
 public class FlightController {
-    private final FlightRepository flightRepository;
+    private final FlightService flightService;
 
 
     /**
      * Erstellt einen neuen Flight Controller
      *
-     * @param flightRepository the flight repository
+     * @param flightService the flight service
      */
-    public FlightController(FlightRepository flightRepository) {
-        this.flightRepository = flightRepository;
+    public FlightController(FlightService flightService) {
+        this.flightService = flightService;
     }
 
     /**
@@ -35,33 +35,33 @@ public class FlightController {
      */
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public List<Flight> getAllFlights() {
-        return flightRepository.findAll();
+    public List<FlightDTO> getAllFlights() {
+        return flightService.getAllFlights();
     }
 
     /**
      * Erstellt neue Flüge die danach in der liste gespeichert werden.
      *
-     * @param flight the flight
-     * @return the flight
+     * @param flightDTO the flight dto
+     * @return the flight dto
      */
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public Flight createFlight(@RequestBody Flight flight) {
-        return flightRepository.save(flight);
+    public FlightDTO createFlight(@RequestBody FlightDTO flightDTO) {
+        return flightService.createFlight(flightDTO);
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteFlight(@PathVariable Long id) {
 
-        if (!flightRepository.existsById(id)) {
+        if (!flightService.existsById(id)) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("Flight not found");
         }
 
-        flightRepository.deleteById(id);
+        flightService.deleteFlight(id);
 
         return ResponseEntity.ok("Flight deleted successfully");
     }

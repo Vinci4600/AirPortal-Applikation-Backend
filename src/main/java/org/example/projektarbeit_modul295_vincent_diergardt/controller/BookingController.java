@@ -1,7 +1,7 @@
 package org.example.projektarbeit_modul295_vincent_diergardt.controller;
 
-import org.example.projektarbeit_modul295_vincent_diergardt.model.Booking;
-import org.example.projektarbeit_modul295_vincent_diergardt.repository.BookingRepository;
+import org.example.projektarbeit_modul295_vincent_diergardt.dto.BookingDTO;
+import org.example.projektarbeit_modul295_vincent_diergardt.service.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,56 +10,57 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Der type Booking controller.
+ * Der Type Booking controller.
  */
 @RestController
-@RequestMapping("/api/booking")
+@RequestMapping("/api/bookings")
+@CrossOrigin(origins = "http://localhost:5173")
 public class BookingController {
-    private final BookingRepository bookingRepository;
+    private final BookingService bookingService;
 
     /**
-     * Erstellt einen neuen Booking Controller.
+     * Erstellt einen neuen Booking Controller
      *
-     * @param bookingRepository the booking repository
+     * @param bookingService the booking service
      */
-    public BookingController(BookingRepository bookingRepository) {
-        this.bookingRepository = bookingRepository;
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
     }
 
     /**
-     * Gibt Alle Buchungen aus die in der Liste gespeichert sind(Datenbank)
+     * Gibt alle Buchungen an
      *
-     * @return the alle Buchungen
+     * @return the all bookings
      */
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public List<Booking> getAllBookings() {//Buchungen anschauen
-        return bookingRepository.findAll();
+    public List<BookingDTO> getAllBookings() {
+        return bookingService.getAllBookings();
     }
 
     /**
-     * Erstellt eine neue Buchung die dann in die Liste Hinzugefügt wird
+     * Erstellt neue Buchungen
      *
-     * @param booking the booking
-     * @return return Booking
+     * @param bookingDTO the booking dto
+     * @return the booking dto
      */
-    @PostMapping("/add")//Buchung Hinzufügen
+    @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public Booking createBooking(@RequestBody Booking booking) {
-        return bookingRepository.save(booking);
+    public BookingDTO createBooking(@RequestBody BookingDTO bookingDTO) {
+        return bookingService.createBooking(bookingDTO);
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteBooking(@PathVariable Long id) {
 
-        if (!bookingRepository.existsById(id)) {
+        if (!bookingService.existsById(id)) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("Booking not found");
         }
 
-        bookingRepository.deleteById(id);
+        bookingService.deleteBooking(id);
 
         return ResponseEntity.ok("Booking deleted successfully");
     }

@@ -1,7 +1,7 @@
 package org.example.projektarbeit_modul295_vincent_diergardt.controller;
 
-import org.example.projektarbeit_modul295_vincent_diergardt.model.Passenger;
-import org.example.projektarbeit_modul295_vincent_diergardt.repository.PassengerRepository;
+import org.example.projektarbeit_modul295_vincent_diergardt.dto.PassengerDTO;
+import org.example.projektarbeit_modul295_vincent_diergardt.service.PassengerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,51 +16,51 @@ import java.util.List;
 @RequestMapping("/api/passengers")
 @CrossOrigin(origins = "http://localhost:5173")
 public class PassengerController {
-    private final PassengerRepository passengerRepository;
+    private final PassengerService passengerService;
 
     /**
-     * Erstellt einen neuen  Passenger controller.
+     * Erstellt ein neues Passenger Controller.
      *
-     * @param passengerRepository the passenger repository
+     * @param passengerService the passenger service
      */
-    public PassengerController(PassengerRepository passengerRepository) {
-        this.passengerRepository = passengerRepository;
+    public PassengerController(PassengerService passengerService) {
+        this.passengerService = passengerService;
     }
 
     /**
-     * Gibt alle Passagieren aus der Liste(Datenbank) an.
+     * Gibt alle Passengers an
      *
      * @return the all passengers
      */
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public List<Passenger> getAllPassengers() {
-        return passengerRepository.findAll();
+    public List<PassengerDTO> getAllPassengers() {
+        return passengerService.getAllPassengers();
     }
 
     /**
-     * Erstellt einen neuen Passagier  der dann im Repository(Schnittstelle zur Datenbank) gespeichert wird.
+     * Erstellt neue Passengers
      *
-     * @param passenger the passenger
-     * @return the passenger
+     * @param passengerDTO the passenger dto
+     * @return the passenger dto
      */
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public Passenger createPassenger(@RequestBody Passenger passenger) {
-        return passengerRepository.save(passenger);
+    public PassengerDTO createPassenger(@RequestBody PassengerDTO passengerDTO) {
+        return passengerService.createPassenger(passengerDTO);
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deletePassenger(@PathVariable Long id) {
 
-        if (!passengerRepository.existsById(id)) {
+        if (!passengerService.existsById(id)) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("Passenger not found");
         }
 
-        passengerRepository.deleteById(id);
+        passengerService.deletePassenger(id);
 
         return ResponseEntity.ok("Passenger deleted successfully");
     }

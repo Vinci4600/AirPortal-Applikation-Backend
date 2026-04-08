@@ -1,7 +1,7 @@
 package org.example.projektarbeit_modul295_vincent_diergardt.controller;
 
-import org.example.projektarbeit_modul295_vincent_diergardt.model.Airport;
-import org.example.projektarbeit_modul295_vincent_diergardt.repository.AirportRepository;
+import org.example.projektarbeit_modul295_vincent_diergardt.dto.AirportDTO;
+import org.example.projektarbeit_modul295_vincent_diergardt.service.AirportService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,69 +16,52 @@ import java.util.List;
 @RequestMapping("/api/airports")
 @CrossOrigin(origins = "http://localhost:5173")
 public class AirportController {
-
-    private final AirportRepository repository;
+    private final AirportService airportService;
 
     /**
-     * Erstellt einen neuen Airport controller.
+     * Erstellt einen neuen Airport Controller
      *
-     * @param repository the repository
+     * @param airportService the airport service
      */
-    public AirportController(AirportRepository repository) {
-        this.repository = repository;
+    public AirportController(AirportService airportService) {
+        this.airportService = airportService;
     }
 
     /**
-     * Gibt alle Flughafen zurück aus der datenbank
+     * Gibt alle Flughäfen an
      *
-     * @return the all
+     * @return the all airports
      */
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public List<Airport> getAll() {
-        return repository.findAll();
+    public List<AirportDTO> getAllAirports() {
+        return airportService.getAllAirports();
     }
 
     /**
-     * Erstellt einen neuen Flughafen und fügt diese in die Liste ein
+     * Erstellt neue Flughäfen
      *
-     *
-     * @return the airport
+     * @param airportDTO the airport dto
+     * @return the airport dto
      */
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public Airport createAirport(@RequestBody Airport airport) {
-        return repository.save(airport);
-    }
-
-    /**
-     *
-     * Erstellt mehrere Flughäfen und fügt diese in die Liste hinzu.
-     */
-    @PostMapping("/addAll")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<Airport> createAirports(@RequestBody List<Airport> airports) {
-        return repository.saveAll(airports);
+    public AirportDTO createAirport(@RequestBody AirportDTO airportDTO) {
+        return airportService.createAirport(airportDTO);
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteAirport(@PathVariable Long id) {
 
-        // Prüfen ob Airport existiert
-        if (!repository.existsById(id)) {
+        if (!airportService.existsById(id)) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("Airport not found");
         }
 
-        try {
-            repository.deleteById(id);
-            return ResponseEntity.ok("Airport deleted successfully");
+        airportService.deleteAirport(id);
 
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Airport kann nicht gelöscht werden, da noch Flights existieren!");
-        }
-    }}
+        return ResponseEntity.ok("Airport deleted successfully");
+    }
+}

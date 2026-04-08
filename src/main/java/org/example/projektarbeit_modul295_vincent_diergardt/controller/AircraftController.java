@@ -1,13 +1,11 @@
 package org.example.projektarbeit_modul295_vincent_diergardt.controller;
 
-import org.example.projektarbeit_modul295_vincent_diergardt.model.Aircraft;
-import org.example.projektarbeit_modul295_vincent_diergardt.repository.AircraftRepository;
-import org.example.projektarbeit_modul295_vincent_diergardt.repository.FlightRepository;
+import org.example.projektarbeit_modul295_vincent_diergardt.dto.AircraftDTO;
+import org.example.projektarbeit_modul295_vincent_diergardt.service.AircraftService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
@@ -15,74 +13,55 @@ import java.util.List;
  * Der Type Aircraft controller.
  */
 @RestController
-@RequestMapping("/api/aircraft")
+@RequestMapping("/api/aircrafts")
 @CrossOrigin(origins = "http://localhost:5173")
-
 public class AircraftController {
-    private final AircraftRepository aircraftRepository;
-    private final FlightRepository flightRepository;
+    private final AircraftService aircraftService;
 
     /**
-     * Erstellt einen neuen Aircraft controller.
+     * Erstellt ein neues Aircraft Controller.
      *
-     * @param aircraftRepository das aircraft repository
+     * @param aircraftService the aircraft service
      */
-    public AircraftController(AircraftRepository aircraftRepository, FlightRepository flightRepository) {
-        this.aircraftRepository = aircraftRepository;
-        this.flightRepository = flightRepository;
+    public AircraftController(AircraftService aircraftService) {
+        this.aircraftService = aircraftService;
     }
 
     /**
-     * Gibt alle Flugzeuge aus die in der datenbank enthalten sind
+     * Gibt alle Aircrafts an
      *
-     *
+     * @return the all aircrafts
      */
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public List<Aircraft> getAllAircraft() {
-        return aircraftRepository.findAll();
+    public List<AircraftDTO> getAllAircrafts() {
+        return aircraftService.getAllAircrafts();
     }
 
     /**
+     * Erstellt neue Aircrafts
      *
-     *
-     * Fügt ein neues flugzeug Hinzu
-     *
+     * @param aircraftDTO the aircraft dto
+     * @return the aircraft dto
      */
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public Aircraft createAircraft(@RequestBody Aircraft aircraft) {
-        return aircraftRepository.save(aircraft);
+    public AircraftDTO createAircraft(@RequestBody AircraftDTO aircraftDTO) {
+        return aircraftService.createAircraft(aircraftDTO);
     }
 
-    /**
-     *
-     * Fügt mehrere Flugzeuge Hinzu und speicher diese dann in der liste
-     * @param aircraftList
-     * @return
-     */
-    @PostMapping("/addAll")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<Aircraft> createMultipleAircraft(@RequestBody List<Aircraft> aircraftList) {
-        return aircraftRepository.saveAll(aircraftList);
-    }
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteAircraft(@PathVariable Long id) {
 
-        if (!aircraftRepository.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        if (!aircraftService.existsById(id)) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
                     .body("Aircraft not found");
         }
 
-        if (!flightRepository.findByAircraft_Id(id).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Aircraft is still assigned to flights");
-        }
+        aircraftService.deleteAircraft(id);
 
-        aircraftRepository.deleteById(id);
-
-        return ResponseEntity.ok("Aircraft deleted");
+        return ResponseEntity.ok("Aircraft deleted successfully");
     }
-
 }
