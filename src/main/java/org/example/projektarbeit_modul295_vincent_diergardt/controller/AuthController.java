@@ -3,7 +3,10 @@ package org.example.projektarbeit_modul295_vincent_diergardt.controller;
 import jakarta.validation.Valid;
 import org.example.projektarbeit_modul295_vincent_diergardt.dto.LoginRequestDTO;
 import org.example.projektarbeit_modul295_vincent_diergardt.dto.LoginResponseDTO;
+import org.example.projektarbeit_modul295_vincent_diergardt.dto.RegisterRequestDTO;
+import org.example.projektarbeit_modul295_vincent_diergardt.dto.RegisterResponseDTO;
 import org.example.projektarbeit_modul295_vincent_diergardt.model.AppUser;
+import org.example.projektarbeit_modul295_vincent_diergardt.model.Role;
 import org.example.projektarbeit_modul295_vincent_diergardt.service.AppUserService;
 import org.example.projektarbeit_modul295_vincent_diergardt.service.JwtService;
 import org.springframework.http.HttpStatus;
@@ -53,7 +56,7 @@ public class AuthController {
                     request.getUsername(),
                     request.getEmail(),
                     request.getPassword(),
-                    Role.PLAYER  // Default Role für neue User
+                    Role.USER  // Default Role für neue User
             );
 
             // Response DTO erstellen
