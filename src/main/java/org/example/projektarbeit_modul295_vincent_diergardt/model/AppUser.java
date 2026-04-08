@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+@Entity
+@Table(name = "app_user")
 public class AppUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,9 @@ public class AppUser implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    public AppUser() {
+    }
 
     public AppUser(String username, String email, String password, Role role) {
         this.username = username;
