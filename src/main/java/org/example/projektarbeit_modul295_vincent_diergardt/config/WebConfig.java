@@ -7,13 +7,52 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    public static final String URL = "http://localhost:5173";
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:5173") // <- Vite dev Server
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        String[] allowedMethods = {"GET", "POST", "PUT", "DELETE", "OPTIONS"};
+        registry.addMapping("/api/aircrafts/**")
+                .allowedOrigins(URL) // <- Vite dev Server
+                .allowedMethods(allowedMethods)
                 .allowedHeaders("*")
                 .allowCredentials(false)
-                .maxAge(3600); // browser cached CORS-Info für 1h (3'600s)
+                .maxAge(3600);
+        registry.addMapping("/api/airports/**")
+                .allowedOrigins(URL) // <- Vite dev Server
+                .allowedMethods(allowedMethods)
+                .allowedHeaders("*")
+                .allowCredentials(false)
+                .maxAge(3600);
+        registry.addMapping("/api/bookings/**")
+                .allowedOrigins(URL) // <- Vite dev Server
+                .allowedMethods(allowedMethods)
+                .allowedHeaders("*")
+                .allowCredentials(false)
+                .maxAge(3600);
+        registry.addMapping("/api/flights/**")
+                .allowedOrigins(URL) // <- Vite dev Server
+                .allowedMethods(allowedMethods)
+                .allowedHeaders("*")
+                .allowCredentials(false)
+                .maxAge(3600);
+        registry.addMapping("/api/logistic_users/**")
+                .allowedOrigins(URL) // <- Vite dev Server
+                .allowedMethods(allowedMethods)
+                .allowedHeaders("*")
+                .allowCredentials(false)
+                .maxAge(3600);
+        registry.addMapping("/api/passengers/**")
+                .allowedOrigins(URL) // <- Vite dev Server
+                .allowedMethods(allowedMethods)
+                .allowedHeaders("*")
+                .allowCredentials(false)
+                .maxAge(3600);
+        registry.addMapping("/api/auth/**") // Added CORS mapping for authentication endpoints
+                .allowedOrigins(URL)
+                .allowedMethods(allowedMethods)
+                .allowedHeaders("*")
+                .allowCredentials(false)
+                .maxAge(3600);
     }
 }
