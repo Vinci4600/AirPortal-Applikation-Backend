@@ -8,7 +8,6 @@ import org.example.projektarbeit_modul295_vincent_diergardt.repository.FlightRep
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FlightService {
@@ -26,7 +25,7 @@ public class FlightService {
     public List<FlightDTO> getAllFlights() {
         return flightRepository.findAll().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public FlightDTO createFlight(FlightDTO flightDTO) {
