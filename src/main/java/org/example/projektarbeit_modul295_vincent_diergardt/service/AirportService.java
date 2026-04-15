@@ -6,7 +6,6 @@ import org.example.projektarbeit_modul295_vincent_diergardt.repository.AirportRe
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AirportService {
@@ -20,7 +19,7 @@ public class AirportService {
     public List<AirportDTO> getAllAirports() {
         return airportRepository.findAll().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public AirportDTO createAirport(AirportDTO airportDTO) {

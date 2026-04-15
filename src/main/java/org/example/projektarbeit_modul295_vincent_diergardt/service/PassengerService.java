@@ -6,7 +6,6 @@ import org.example.projektarbeit_modul295_vincent_diergardt.repository.Passenger
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PassengerService {
@@ -20,7 +19,7 @@ public class PassengerService {
     public List<PassengerDTO> getAllPassengers() {
         return passengerRepository.findAll().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public PassengerDTO createPassenger(PassengerDTO passengerDTO) {

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LogisticUserService {
@@ -21,7 +20,7 @@ public class LogisticUserService {
     public List<LogisticUserDTO> getAllLogisticUsers() {
         return logisticUserRepository.findAll().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public LogisticUserDTO createLogisticUser(LogisticUserDTO logisticUserDTO) {

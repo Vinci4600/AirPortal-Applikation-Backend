@@ -8,7 +8,6 @@ import org.example.projektarbeit_modul295_vincent_diergardt.repository.Passenger
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -26,7 +25,7 @@ public class BookingService {
     public List<BookingDTO> getAllBookings() {
         return bookingRepository.findAll().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public BookingDTO createBooking(BookingDTO bookingDTO) {

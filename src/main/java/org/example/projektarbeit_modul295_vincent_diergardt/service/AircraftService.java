@@ -6,7 +6,6 @@ import org.example.projektarbeit_modul295_vincent_diergardt.repository.AircraftR
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AircraftService {
@@ -20,7 +19,7 @@ public class AircraftService {
     public List<AircraftDTO> getAllAircrafts() {
         return aircraftRepository.findAll().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public AircraftDTO createAircraft(AircraftDTO aircraftDTO) {
