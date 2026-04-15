@@ -31,8 +31,6 @@ class AircraftServiceTest {
 
     @Mock
     private AircraftRepository aircraftRepository;
-    @Mock
-    private Long aircraftID;
 
 
     private List<Aircraft> aircrafts = new ArrayList<>();
