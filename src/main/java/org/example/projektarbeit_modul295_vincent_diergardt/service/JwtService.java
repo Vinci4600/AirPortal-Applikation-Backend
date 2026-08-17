@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,24 @@ public class JwtService {
 
     @Value("${jwt.expiration}")
     private long expirationTime;
+
+    /**
+     * Validate the JWT configuration on startup.
+     *
+     * @throws IllegalStateException if the secret or the expiration is unusable
+     */
+    @PostConstruct
+    public void validateConfig() {
+        if (secretKey == null || secretKey.isBlank()) {
+            throw new IllegalStateException("jwt.secret must be set via JWT_SECRET environment variable");
+        }
+        if (secretKey.getBytes(StandardCharsets.UTF_8).length < 32) {
+            throw new IllegalStateException("jwt.secret must be at least 32 characters (256 bits) for HS256");
+        }
+        if (expirationTime <= 0) {
+            throw new IllegalStateException("jwt.expiration must be a positive value in milliseconds");
+        }
+    }
 
     public String generateToken(String username, String role) {
         // 1. Claims Map erstellen (Payload)
