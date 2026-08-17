@@ -14,7 +14,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/logistic_users")
-@CrossOrigin(origins = "http://localhost:5173")
 public class LogisticUserController {
     private final LogisticUserService logisticUserService;
 
