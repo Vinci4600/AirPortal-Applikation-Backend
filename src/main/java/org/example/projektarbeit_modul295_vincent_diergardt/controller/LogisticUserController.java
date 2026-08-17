@@ -1,5 +1,6 @@
 package org.example.projektarbeit_modul295_vincent_diergardt.controller;
 
+import jakarta.validation.Valid;
 import org.example.projektarbeit_modul295_vincent_diergardt.dto.LogisticUserDTO;
 import org.example.projektarbeit_modul295_vincent_diergardt.service.LogisticUserService;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,7 @@ public class LogisticUserController {
      */
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public LogisticUserDTO createLogisticUser(@RequestBody LogisticUserDTO logisticUserDTO) {
+    public LogisticUserDTO createLogisticUser(@Valid @RequestBody LogisticUserDTO logisticUserDTO) {
         return logisticUserService.createLogisticUser(logisticUserDTO);
     }
 

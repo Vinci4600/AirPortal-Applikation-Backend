@@ -1,5 +1,6 @@
 package org.example.projektarbeit_modul295_vincent_diergardt.controller;
 
+import jakarta.validation.Valid;
 import org.example.projektarbeit_modul295_vincent_diergardt.dto.AirportDTO;
 import org.example.projektarbeit_modul295_vincent_diergardt.service.AirportService;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,7 @@ public class AirportController {
      */
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public AirportDTO createAirport(@RequestBody AirportDTO airportDTO) {
+    public AirportDTO createAirport(@Valid @RequestBody AirportDTO airportDTO) {
         return airportService.createAirport(airportDTO);
     }
 

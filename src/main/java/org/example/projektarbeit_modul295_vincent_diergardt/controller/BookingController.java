@@ -1,5 +1,6 @@
 package org.example.projektarbeit_modul295_vincent_diergardt.controller;
 
+import jakarta.validation.Valid;
 import org.example.projektarbeit_modul295_vincent_diergardt.dto.BookingDTO;
 import org.example.projektarbeit_modul295_vincent_diergardt.service.BookingService;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,7 @@ public class BookingController {
      */
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public BookingDTO createBooking(@RequestBody BookingDTO bookingDTO) {
+    public BookingDTO createBooking(@Valid @RequestBody BookingDTO bookingDTO) {
         return bookingService.createBooking(bookingDTO);
     }
 

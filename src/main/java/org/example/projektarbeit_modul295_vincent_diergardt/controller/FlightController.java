@@ -1,5 +1,6 @@
 package org.example.projektarbeit_modul295_vincent_diergardt.controller;
 
+import jakarta.validation.Valid;
 import org.example.projektarbeit_modul295_vincent_diergardt.dto.FlightDTO;
 import org.example.projektarbeit_modul295_vincent_diergardt.service.FlightService;
 import org.springframework.http.HttpStatus;
@@ -46,7 +47,7 @@ public class FlightController {
      */
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public FlightDTO createFlight(@RequestBody FlightDTO flightDTO) {
+    public FlightDTO createFlight(@Valid @RequestBody FlightDTO flightDTO) {
         return flightService.createFlight(flightDTO);
     }
 

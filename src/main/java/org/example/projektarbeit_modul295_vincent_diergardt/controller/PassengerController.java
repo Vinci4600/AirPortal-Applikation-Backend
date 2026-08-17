@@ -1,5 +1,6 @@
 package org.example.projektarbeit_modul295_vincent_diergardt.controller;
 
+import jakarta.validation.Valid;
 import org.example.projektarbeit_modul295_vincent_diergardt.dto.PassengerDTO;
 import org.example.projektarbeit_modul295_vincent_diergardt.service.PassengerService;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,7 @@ public class PassengerController {
      */
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public PassengerDTO createPassenger(@RequestBody PassengerDTO passengerDTO) {
+    public PassengerDTO createPassenger(@Valid @RequestBody PassengerDTO passengerDTO) {
         return passengerService.createPassenger(passengerDTO);
     }
 
