@@ -1,6 +1,7 @@
 package org.example.projektarbeit_modul295_vincent_diergardt.service;
 
 import org.example.projektarbeit_modul295_vincent_diergardt.dto.BookingDTO;
+import org.example.projektarbeit_modul295_vincent_diergardt.exception.ResourceNotFoundException;
 import org.example.projektarbeit_modul295_vincent_diergardt.model.Booking;
 import org.example.projektarbeit_modul295_vincent_diergardt.repository.BookingRepository;
 import org.example.projektarbeit_modul295_vincent_diergardt.repository.FlightRepository;
@@ -54,14 +55,10 @@ public class BookingService {
     private Booking convertToEntity(BookingDTO dto) {
         Booking booking = new Booking();
         booking.setBookingDate(dto.bookingDate());
-        
-        if (dto.flightId() != null) {
-            flightRepository.findById(dto.flightId()).ifPresent(booking::setFlight);
-        }
-        if (dto.passengerId() != null) {
-            passengerRepository.findById(dto.passengerId()).ifPresent(booking::setPassenger);
-        }
-        
+        booking.setFlight(flightRepository.findById(dto.flightId())
+                .orElseThrow(() -> new ResourceNotFoundException("Flight not found: " + dto.flightId())));
+        booking.setPassenger(passengerRepository.findById(dto.passengerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Passenger not found: " + dto.passengerId())));
         return booking;
     }
 }

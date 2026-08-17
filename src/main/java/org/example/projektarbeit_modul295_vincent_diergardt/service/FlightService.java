@@ -1,6 +1,7 @@
 package org.example.projektarbeit_modul295_vincent_diergardt.service;
 
 import org.example.projektarbeit_modul295_vincent_diergardt.dto.FlightDTO;
+import org.example.projektarbeit_modul295_vincent_diergardt.exception.ResourceNotFoundException;
 import org.example.projektarbeit_modul295_vincent_diergardt.model.Flight;
 import org.example.projektarbeit_modul295_vincent_diergardt.repository.AircraftRepository;
 import org.example.projektarbeit_modul295_vincent_diergardt.repository.AirportRepository;
@@ -59,17 +60,12 @@ public class FlightService {
         flight.setFlightNumber(dto.flightNumber());
         flight.setDepartureTime(dto.departureTime());
         flight.setArrivalTime(dto.arrivalTime());
-        
-        if (dto.aircraftId() != null) {
-            aircraftRepository.findById(dto.aircraftId()).ifPresent(flight::setAircraft);
-        }
-        if (dto.departureAirportId() != null) {
-            airportRepository.findById(dto.departureAirportId()).ifPresent(flight::setDepartureAirport);
-        }
-        if (dto.arrivalAirportId() != null) {
-            airportRepository.findById(dto.arrivalAirportId()).ifPresent(flight::setArrivalAirport);
-        }
-        
+        flight.setAircraft(aircraftRepository.findById(dto.aircraftId())
+                .orElseThrow(() -> new ResourceNotFoundException("Aircraft not found: " + dto.aircraftId())));
+        flight.setDepartureAirport(airportRepository.findById(dto.departureAirportId())
+                .orElseThrow(() -> new ResourceNotFoundException("Departure airport not found: " + dto.departureAirportId())));
+        flight.setArrivalAirport(airportRepository.findById(dto.arrivalAirportId())
+                .orElseThrow(() -> new ResourceNotFoundException("Arrival airport not found: " + dto.arrivalAirportId())));
         return flight;
     }
 }
